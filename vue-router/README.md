@@ -17,3 +17,8 @@ npm run build
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### Execute json-server in data/db.json
+```
+npx json-server --watch data/db.json
+```
