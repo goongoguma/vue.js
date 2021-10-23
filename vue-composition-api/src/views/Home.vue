@@ -1,70 +1,32 @@
 <template>
   <div class="home">
     <h1>Home</h1>
-    <p>{{ name }}</p>
-    <input type="text" v-model="search" />
-    <p>search term - {{ search }}</p>
-    <div v-for="name in matchingNames" :key="name">{{ name }}</div>
-    <button @click="handleClick">stop watching</button>
-    <!-- <h2>Refs</h2>
-    <p>{{ ninjaOne.name }} - {{ ninjaOne.age }}</p>
-    <button @click="updateNinjaOne">Update ninja one</button>
-    <h2>Reactive</h2>
-    <p>{{ ninjaTwo.name }} - {{ ninjaTwo.age }}</p>
-    <button @click="updateNinjaTwo">Update ninja two</button> -->
+    <PostList v-if="showPosts" :posts="posts" />
+    <button @click="showPosts = !showPosts">toggle posts</button>
+    <button @click="posts.pop()">delete a post</button>
   </div>
 </template>
 
 <script>
-import { ref, reactive, computed, watch, watchEffect } from "vue";
+import PostList from "../components/PostList.vue";
+import { ref } from "vue";
 
 export default {
   name: "Home",
+  components: { PostList },
   setup() {
-    const search = ref("");
-    const names = ref([
-      "mario",
-      "yoshi",
-      "luigi",
-      "toad",
-      "bowser",
-      "koopa",
-      "peach",
+    // "ref" is for react value inside setup
+    const posts = ref([
+      {
+        title: "welcome to the blog",
+        body: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+        id: 1,
+      },
+      { title: "top 5 css tips", body: "lorem ipsum", id: 2 },
     ]);
+    const showPosts = ref(true);
 
-    const stopWatch = watch(search, () => {
-      console.log("watch");
-    });
-
-    const stopEffect = watchEffect(() => {
-      console.log("watchEffect");
-    });
-
-    const matchingNames = computed(() => {
-      return names.value.filter((name) => name.includes(search.value));
-    });
-
-    const handleClick = () => {
-      stopWatch();
-      stopEffect();
-    };
-
-    return {
-      names,
-      search,
-      matchingNames,
-      handleClick,
-    };
-    // const ninjaOne = ref({ name: "mario", age: 30 });
-    // reactive는 primitive value 사용불가
-    // const ninjaTwo = reactive({ name: "luigi", age: 35 });
-    // const updateNinjaOne = () => {
-    //   ninjaOne.value.age = 40;
-    // };
-    // const updateNinjaTwo = () => {
-    //   ninjaTwo.age = 45;
-    // };
-    // return { ninjaOne, updateNinjaOne, ninjaTwo, updateNinjaTwo };
+    return { posts, showPosts };
   },
 };
 </script>
